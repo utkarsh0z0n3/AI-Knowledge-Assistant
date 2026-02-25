@@ -31,7 +31,7 @@ app.get('/protected', authMiddleware, (req,res) => {
 })
 
 
-
+console.log("PORT from env:", process.env.PORT);
 const start = async () => {
   try {
     await sequelize.authenticate();
