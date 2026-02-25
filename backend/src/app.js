@@ -42,23 +42,22 @@ app.get("/", (req, res) => {
   res.send("Backend alive");
 });
 
-console.log("PORT from env:", process.env.PORT);
-const start = async () => {
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on ${PORT}`);
+});
+
+const init = async () => {
   try {
     await sequelize.authenticate();
     console.log("Database connected ✅");
 
-    await sequelize.sync(
-      process.env.NODE_ENV === "development" ? { alter: true } : {},
-    );
+    await sequelize.sync();
     console.log("Tables synced ✅");
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Server running on ${PORT}`);
-    });
   } catch (err) {
-    console.error("DB connection failed ❌", err);
+    console.error("DB init failed:", err);
   }
 };
 
-start();
+init();
