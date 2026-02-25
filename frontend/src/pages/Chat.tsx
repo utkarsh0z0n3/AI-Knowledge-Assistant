@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import HistorySidebar from "./HistorySidebar";
 import TypingMessage from "../components/TypingMessage";
 import Citation from "../components/Citation";
 import useTheme from "../hooks/useTheme";
+import { useNavigate } from "react-router-dom";
 
 export default function Chat() {
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const { dark, setDark } = useTheme();
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    const token = localStorage.get("token");
+    
+    if(!token)
+    {
+      navigate("/login");
+    }
+  },[])
 
   const ask = async () => {
     if (!question.trim()) return;
