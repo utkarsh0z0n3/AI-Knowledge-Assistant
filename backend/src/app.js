@@ -12,6 +12,7 @@ import { authMiddleware } from "./modules/auth/auth.middleware.js";
 import documentRoutes from "./modules/document/document.routes.js";
 import searchRoutes from "./modules/search/search.routes.js";
 import chatRoutes from "./modules/chat/chat.routes.js";
+import fs from "fs";
 
 
 
