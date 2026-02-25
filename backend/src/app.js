@@ -12,6 +12,11 @@ import { authMiddleware } from "./modules/auth/auth.middleware.js";
 import documentRoutes from "./modules/document/document.routes.js";
 import searchRoutes from "./modules/search/search.routes.js";
 import chatRoutes from "./modules/chat/chat.routes.js";
+import fs from "fs";
+
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
 
 process.on("uncaughtException", (err) => {
   console.error("UNCAUGHT EXCEPTION:", err);
@@ -41,6 +46,10 @@ app.get("/protected", authMiddleware, (req, res) => {
 app.get("/", (req, res) => {
   res.send("Backend alive");
 });
+
+setInterval(() => {
+  console.log("heartbeat alive");
+}, 10000);
 
 const PORT = process.env.PORT || 5000;
 
