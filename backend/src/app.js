@@ -13,6 +13,15 @@ import documentRoutes from "./modules/document/document.routes.js";
 import searchRoutes from "./modules/search/search.routes.js";
 import chatRoutes from "./modules/chat/chat.routes.js";
 
+process.on("uncaughtException", (err) => {
+  console.error("UNCAUGHT EXCEPTION:", err);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.error("UNHANDLED REJECTION:", err);
+});
+
+
 const app = express();
 
 app.use(cors());
@@ -29,6 +38,10 @@ app.get('/health', (req, res) => {
 app.get('/protected', authMiddleware, (req,res) => {
   res.json({ message: `Hello ${req.user.id}, you have access!` });
 })
+
+app.get("/", (req, res) => {
+  res.send("Backend alive");
+});
 
 
 console.log("PORT from env:", process.env.PORT);
