@@ -14,7 +14,7 @@ export default function Chat() {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    const token = localStorage.get("token");
+    const token = localStorage.getItem("token");
     
     if(!token)
     {
