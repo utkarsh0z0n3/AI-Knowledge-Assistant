@@ -1,6 +1,6 @@
-import './config/env.js';
-import express from 'express';
-import cors from 'cors';
+import "./config/env.js";
+import express from "express";
+import cors from "cors";
 import sequelize from "./infra/db.js";
 import User from "./modules/auth/user.model.js";
 import Document from "./modules/document/document.model.js";
@@ -21,28 +21,26 @@ process.on("unhandledRejection", (err) => {
   console.error("UNHANDLED REJECTION:", err);
 });
 
-
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/documents", documentRoutes);
-app.use("/search",searchRoutes);
+app.use("/search", searchRoutes);
 app.use("/chat", chatRoutes);
 
-app.get('/health', (req, res) => {
-    res.json({ status: 'backend running 🚀' });
+app.get("/health", (req, res) => {
+  res.json({ status: "backend running 🚀" });
 });
 
-app.get('/protected', authMiddleware, (req,res) => {
+app.get("/protected", authMiddleware, (req, res) => {
   res.json({ message: `Hello ${req.user.id}, you have access!` });
-})
+});
 
 app.get("/", (req, res) => {
   res.send("Backend alive");
 });
-
 
 console.log("PORT from env:", process.env.PORT);
 const start = async () => {
@@ -50,10 +48,12 @@ const start = async () => {
     await sequelize.authenticate();
     console.log("Database connected ✅");
 
-   await sequelize.sync({alter: true});
+    await sequelize.sync(
+      process.env.NODE_ENV === "development" ? { alter: true } : {},
+    );
     console.log("Tables synced ✅");
     const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
+    app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running on ${PORT}`);
     });
   } catch (err) {
