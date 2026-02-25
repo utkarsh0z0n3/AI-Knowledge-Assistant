@@ -12,7 +12,8 @@ import { authMiddleware } from "./modules/auth/auth.middleware.js";
 import documentRoutes from "./modules/document/document.routes.js";
 import searchRoutes from "./modules/search/search.routes.js";
 import chatRoutes from "./modules/chat/chat.routes.js";
-import fs from "fs";
+
+
 
 if (!fs.existsSync("uploads")) {
   fs.mkdirSync("uploads");
@@ -28,7 +29,7 @@ process.on("unhandledRejection", (err) => {
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/documents", documentRoutes);
@@ -46,10 +47,6 @@ app.get("/protected", authMiddleware, (req, res) => {
 app.get("/", (req, res) => {
   res.send("Backend alive");
 });
-
-setInterval(() => {
-  console.log("heartbeat alive");
-}, 10000);
 
 const PORT = process.env.PORT || 5000;
 
