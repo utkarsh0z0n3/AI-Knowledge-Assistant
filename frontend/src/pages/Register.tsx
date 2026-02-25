@@ -2,10 +2,12 @@ import { useState } from "react";
 import {api} from "../api/client";
 import { useNavigate } from "react-router-dom";
 
-export default function Register() {
+const Register = () =>{
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  console.log("register page")
 
   const register = async () => {
     await api.post("/auth/register", { email, password });
@@ -42,3 +44,5 @@ export default function Register() {
     </div>
   );
 }
+
+export default Register;

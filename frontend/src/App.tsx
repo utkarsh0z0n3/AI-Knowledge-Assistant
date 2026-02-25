@@ -2,11 +2,14 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import ProtectedRoute from "./Routes/ProtectedRoute";
+import Register from "./pages/Register";
+
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="/chat"
