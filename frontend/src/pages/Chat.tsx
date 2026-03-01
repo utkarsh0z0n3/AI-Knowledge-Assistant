@@ -13,14 +13,13 @@ export default function Chat() {
   const { dark, setDark } = useTheme();
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     const token = localStorage.getItem("token");
-    
-    if(!token)
-    {
+
+    if (!token) {
       navigate("/login");
     }
-  },[])
+  }, []);
 
   const ask = async () => {
     if (!question.trim()) return;
@@ -50,8 +49,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="h-screen flex bg-gray-50 dark:bg-gray-950">
-      {/* Sidebar */}
+    <div className="h-screen flex bg-slate-100 dark:bg-slate-950">
       <HistorySidebar
         onSelect={(h: any) =>
           setMessages([
@@ -61,41 +59,45 @@ export default function Chat() {
         }
       />
 
-      {/* Chat Area */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="p-4 border-b bg-white dark:bg-gray-900 dark:text-white flex justify-between">
-          <div className="font-semibold">AI Knowledge Assistant</div>
+        <div className="px-6 py-4 border-b border-slate-200 bg-white/95 backdrop-blur dark:bg-slate-900 dark:border-slate-800 dark:text-white flex justify-between items-center">
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-wider text-indigo-500 dark:text-indigo-300">
+              AI Knowledge Assistant
+            </div>
+            <div className="text-sm text-slate-500 dark:text-slate-400">Ask questions over your uploaded documents</div>
+          </div>
 
           <button
             onClick={() => setDark(!dark)}
-            className="text-sm px-3 py-1 border rounded dark:border-gray-700"
+            className="text-sm px-3 py-1.5 border rounded-lg transition border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
           >
-            {dark ? "Light" : "Dark"}
+            {dark ? "☀️ Light" : "🌙 Dark"}
           </button>
         </div>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-b from-slate-100 to-slate-50 dark:from-slate-950 dark:to-slate-900">
+          {messages.length === 0 && (
+            <div className="mx-auto mt-20 max-w-lg rounded-2xl border border-dashed border-slate-300 bg-white/70 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-400">
+              Start with a question like <span className="font-semibold">“Summarize my latest uploaded document”</span>.
+            </div>
+          )}
+
           {messages.map((m, i) => (
             <div
               key={i}
-              className={`max-w-xl p-4 rounded-xl shadow-sm ${
+              className={`max-w-2xl p-4 rounded-2xl shadow-sm ${
                 m.role === "user"
-                  ? "ml-auto bg-blue-500 text-white shadow-md"
-                  : "bg-white border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                  ? "ml-auto bg-indigo-600 text-white shadow-indigo-200/50 dark:shadow-none"
+                  : "bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
               }`}
             >
-              <div>
-                {m.role === "ai" ? (
-                  <TypingMessage text={m.text} />
-                ) : (
-                  <div>{m.text}</div>
-                )}
+              <div className="leading-relaxed">
+                {m.role === "ai" ? <TypingMessage text={m.text} /> : <div>{m.text}</div>}
               </div>
 
               {m.sources && (
-                <div className="text-xs mt-2 text-gray-500">
+                <div className="text-xs mt-3 text-slate-500">
                   <div className="mt-2 flex flex-wrap gap-2">
                     {m.sources.map((s: any, i: number) => (
                       <Citation key={i} content={s.preview} />
@@ -106,23 +108,21 @@ export default function Chat() {
             </div>
           ))}
 
-          {loading && (
-            <div className="text-gray-400 animate-pulse">AI thinking...</div>
-          )}
+          {loading && <div className="text-slate-400 animate-pulse">AI thinking...</div>}
         </div>
 
-        {/* Input */}
-        <div className="border-t bg-white dark:bg-gray-900 dark:border-gray-700 p-4 flex gap-2">
+        <div className="border-t border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-800 p-4 flex gap-2">
           <input
-            className="flex-1 border rounded-lg px-4 py-2 outline-none focus:ring bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+            className="flex-1 border border-slate-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 bg-white dark:bg-slate-800 dark:border-slate-700 dark:text-white"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Ask something..."
+            placeholder="Ask anything from your uploaded docs..."
+            onKeyDown={(e) => e.key === "Enter" && ask()}
           />
 
           <button
             onClick={ask}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-indigo-700 transition"
           >
             Send
           </button>
